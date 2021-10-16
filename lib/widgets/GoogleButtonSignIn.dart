@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:flutterapp2/pages/menuPage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutterapp2/services/googleSignInService.dart';
+
+class GoogleButtonSignIn extends StatelessWidget {
+  const GoogleButtonSignIn({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only( left: 30, right: 30),
+      child: MaterialButton(
+        splashColor: Colors.transparent,
+        minWidth: double.infinity,
+        height: 40,
+        color: Colors.red,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8)
+        ),
+        onPressed: () async{
+          final response = await GoogleSignInService.signInWithGoogle( false );
+          if( response['ok'] ){
+            Navigator.pushReplacement(
+              context, 
+              PageRouteBuilder(
+                pageBuilder: ( _, __, ___ ) => MenuPage(),
+                transitionDuration: Duration(milliseconds: 0)
+              )
+            );
+          }else{
+            print('Error');
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon( FontAwesomeIcons.google, color: Colors.white,),
+            Text(' Registrarte con google', style: TextStyle( color: Colors.white, fontSize: 17 ),)
+          ],
+        ),
+      ),
+    );
+  }
+}
