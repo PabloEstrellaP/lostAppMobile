@@ -12,14 +12,7 @@ class _ExampleState extends State<Example> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Hola')
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-          
-          ],
-        )
+        title: Text('Example'),
       ),
     );
   }

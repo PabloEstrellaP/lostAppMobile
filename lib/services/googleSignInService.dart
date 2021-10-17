@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+
+import 'package:flutterapp2/global/environment.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
@@ -18,17 +20,11 @@ class GoogleSignInService {
       
       String path;
       if( isLogin ){
-        path = '/api/auth/login';
+        path = '/login';
       }else{
-        path = '/api/auth/google';
+        path = '/google';
       }
-      final signInWithGoogleEndpoint = Uri(
-        scheme: 'http',
-        // host: ' http://192.168.1.73:8080/',
-        host: '192.168.1.73',
-        port: 8080,
-        path: path,
-      );
+      final signInWithGoogleEndpoint = getPath( path );
       final userData = account;
       final session = await http.post( signInWithGoogleEndpoint, 
         body: {
@@ -44,6 +40,24 @@ class GoogleSignInService {
       print('Error en google');
       print( error );
       return null;
+    }
+  }
+
+  static Future renewToken() async {
+    
+    try{
+      final response = getPath('/renew');
+      print(response);
+      final isRenewToken = await http.get( response, 
+        headers: {
+          'Content-Type': 'application/json',
+          'token' : await getToken(),
+        }
+      );
+      final body = jsonDecode(isRenewToken.body);
+    return body;
+    }catch( err ){
+      print( err );
     }
   }
 
@@ -63,6 +77,18 @@ class GoogleSignInService {
 
   static Future getToken() async {
     final _storage = FlutterSecureStorage();
-    return await _storage.read(key: 'token');
+    final token = await _storage.read(key: 'token');
+    print(token);
+    return token == null ? '' : token;
+  }
+
+  static getPath( pathService ){
+    return Uri(
+        scheme: Environment.scheme,
+        // host: ' http://192.168.1.73:8080/',
+        host: Environment.host,
+        port: 8080,
+        path: '/api/auth' + pathService,
+      );
   }
 }

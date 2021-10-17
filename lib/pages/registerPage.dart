@@ -10,26 +10,31 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
-          child: Container(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                LogoIcon( title: 'LostPet',),
-                GoogleButtonSignIn(),
-                Labels(
-                  path: 'login',
-                  title: '¿Ya tienes una cuenta?',
-                  subTitle: '¡Ingresa ahora!',
-                ),
-                Text('Términos y condiciones de uso', style: TextStyle( fontWeight: FontWeight.w200 ),)
-              ],
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.9,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  LogoIcon( title: 'LostPet',),
+                  GoogleButtonSignIn(
+                    title: ' Registrate con google',
+                    isLogin: false,
+                  ),
+                  Labels(
+                    path: 'login',
+                    title: '¿Ya tienes una cuenta?',
+                    subTitle: '¡Ingresa ahora!',
+                  ),
+                ],
+              ),
             ),
-          ),
-        )),
+          )),
+      ),
     );
   }
 }

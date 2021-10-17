@@ -4,8 +4,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutterapp2/services/googleSignInService.dart';
 
 class GoogleButtonSignIn extends StatelessWidget {
+  final String title;
+  final bool isLogin;
   const GoogleButtonSignIn({
     Key? key,
+    required this.title,
+    required this.isLogin
   }) : super(key: key);
 
   @override
@@ -21,8 +25,7 @@ class GoogleButtonSignIn extends StatelessWidget {
           borderRadius: BorderRadius.circular(8)
         ),
         onPressed: () async{
-          print('Entré');
-          final response = await GoogleSignInService.signInWithGoogle( false );
+          final response = await GoogleSignInService.signInWithGoogle( this.isLogin );
           if( response['ok'] ){
             await GoogleSignInService.saveToken(response['token']);
             Navigator.pushReplacement(
@@ -33,14 +36,14 @@ class GoogleButtonSignIn extends StatelessWidget {
               )
             );
           }else{
-            print('Error');
+            await GoogleSignInService.signOut();
           }
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon( FontAwesomeIcons.google, color: Colors.white,),
-            Text(' Registrarte con google', style: TextStyle( color: Colors.white, fontSize: 17 ),)
+            Text( this.title, style: TextStyle( color: Colors.white, fontSize: 17 ),)
           ],
         ),
       ),
