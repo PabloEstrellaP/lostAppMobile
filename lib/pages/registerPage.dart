@@ -18,7 +18,7 @@ class RegisterPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                LogoIcon( title: 'LostApp',),
+                LogoIcon( title: 'LostPet',),
                 GoogleButtonSignIn(),
                 Labels(
                   path: 'login',

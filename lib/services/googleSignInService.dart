@@ -5,7 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
 class GoogleSignInService {
-  final _storage = FlutterSecureStorage();
   static GoogleSignIn _googleSignIn = GoogleSignIn(
     scopes: [
       'email',
@@ -23,11 +22,11 @@ class GoogleSignInService {
       }else{
         path = '/api/auth/google';
       }
-
       final signInWithGoogleEndpoint = Uri(
-        scheme: 'https',
+        scheme: 'http',
         // host: ' http://192.168.1.73:8080/',
-        host: 'lost-puppy-api.herokuapp.com',
+        host: '192.168.1.73',
+        port: 8080,
         path: path,
       );
       final userData = account;
@@ -38,10 +37,8 @@ class GoogleSignInService {
         }
       );
       final body = jsonDecode(session.body);
-      if( body['ok']){
-        // await this._saveToken( body['token']);
-        return body;
-      }
+      return body;
+      
     }
     catch( error ){
       print('Error en google');
@@ -54,11 +51,18 @@ class GoogleSignInService {
     await _googleSignIn.signOut();
   }
 
-  Future _saveToken( token ) async {
-    return await _storage.write(key: token, value: 'token');
+  static Future saveToken( token ) async {
+    final _storage = FlutterSecureStorage();
+    return await _storage.write(key: 'token', value: token);
   }
 
-  Future _deleteToken() async {
+  static Future deleteToken() async {
+    final _storage = FlutterSecureStorage();
     await _storage.delete(key: 'token');
+  }
+
+  static Future getToken() async {
+    final _storage = FlutterSecureStorage();
+    return await _storage.read(key: 'token');
   }
 }

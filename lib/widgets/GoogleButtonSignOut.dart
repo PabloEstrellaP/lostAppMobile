@@ -13,6 +13,7 @@ class GoogleButtonSignOut extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () async{
+        await GoogleSignInService.deleteToken();
         await GoogleSignInService.signOut();
         Navigator.pushReplacement(
           context, 

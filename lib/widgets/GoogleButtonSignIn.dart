@@ -21,8 +21,10 @@ class GoogleButtonSignIn extends StatelessWidget {
           borderRadius: BorderRadius.circular(8)
         ),
         onPressed: () async{
+          print('Entré');
           final response = await GoogleSignInService.signInWithGoogle( false );
           if( response['ok'] ){
+            await GoogleSignInService.saveToken(response['token']);
             Navigator.pushReplacement(
               context, 
               PageRouteBuilder(
