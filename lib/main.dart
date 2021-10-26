@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'LostPet',
-      initialRoute: 'loading',
+      initialRoute: 'example',
       routes: appRoutes,
     );
   }
