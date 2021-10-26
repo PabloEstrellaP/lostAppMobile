@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutterapp2/widgets/CardData.dart';
+import 'package:flutterapp2/widgets/ImageCard.dart';
+import 'package:flutterapp2/widgets/Subtitle.dart';
 import 'package:photo_view/photo_view.dart';
 
 class Example extends StatefulWidget {
@@ -70,11 +72,9 @@ class _ExampleState extends State<Example> {
                     ),
                   )
                 ),
-                Text('Descripción', 
-                  style: TextStyle( 
-                    color: Colors.blue.shade800, 
-                     fontSize: size.width * 0.05
-                  ),
+                Subtitle(
+                  title: 'Descripción', 
+                  size: size
                 ),
                 SizedBox(
                   height: 5,
@@ -88,11 +88,9 @@ class _ExampleState extends State<Example> {
                 SizedBox(
                   height: 10,
                 ),
-                Text('Fotos', 
-                  style: TextStyle( 
-                    color: Colors.blue.shade800, 
-                     fontSize: size.width * 0.05
-                  ),
+                Subtitle(
+                  title: 'Fotos', 
+                  size: size
                 ),
                 SizedBox(
                   height: 10,
@@ -103,86 +101,32 @@ class _ExampleState extends State<Example> {
                   child: ListView(
                     scrollDirection: Axis.horizontal, 
                     children: [
-                      Container(
-                        margin: const EdgeInsets.only( left: 2.5, right: 2.5),
-                        height: size.height * 0.10,
-                        width: size.width * 0.2,
-                        color: Colors.black,
-                        child: Card(
-                          child: InkWell(
-                            onTap: (){
-                              _showDialog( context,
-                              'https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/59bbb29c5bafe878503c9872/husky-siberiano-bosque.jpg'
-                               );
-                            },
-                            child: Image.network('https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/59bbb29c5bafe878503c9872/husky-siberiano-bosque.jpg',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
+                      ImageCard(
+                        onPressed: (){
+                          _showDialog( context,
+                            'https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/59bbb29c5bafe878503c9872/husky-siberiano-bosque.jpg'
+                          );
+                        }, 
+                        size: size, 
+                        imgPath: 'https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/59bbb29c5bafe878503c9872/husky-siberiano-bosque.jpg',
                       ),
-                      Container(
-                        margin: const EdgeInsets.only( left: 2.5, right: 2.5),
-                        height: size.height * 0.15,
-                        width: size.width * 0.2,
-                        color: Colors.black,
-                        child: Card(
-                          child: InkWell(
-                            onTap: (){
-                              _showDialog( context,
-                              'https://phantom-expansion.unidadeditorial.es/04d5a7930d32e4860ba7cf82291b9d30/resize/640/assets/multimedia/imagenes/2021/03/18/16160714974849.jpg'
-                               );
-                            },
-                            child: Image.network('https://phantom-expansion.unidadeditorial.es/04d5a7930d32e4860ba7cf82291b9d30/resize/640/assets/multimedia/imagenes/2021/03/18/16160714974849.jpg',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
+                      ImageCard(
+                        onPressed: (){
+                          _showDialog( context,
+                            'https://phantom-expansion.unidadeditorial.es/04d5a7930d32e4860ba7cf82291b9d30/resize/640/assets/multimedia/imagenes/2021/03/18/16160714974849.jpg'
+                          );
+                        }, 
+                        size: size, 
+                        imgPath: 'https://phantom-expansion.unidadeditorial.es/04d5a7930d32e4860ba7cf82291b9d30/resize/640/assets/multimedia/imagenes/2021/03/18/16160714974849.jpg',
                       ),
-                      Container(
-                        margin: const EdgeInsets.only( left: 2.5, right: 2.5),
-                        height: size.height * 0.15,
-                        width: size.width * 0.2,
-                        color: Colors.black,
-                        child: Card(
-                          child: InkWell(
-                            onTap: (){
-                              _showDialog( context,
-                              'https://www.hola.com/imagenes/estar-bien/20190820147813/razas-perros-pequenos-parecen-grandes/0-711-550/razas-perro-pequenos-grandes-m.jpg'
-                               );
-                            },
-                            child: Image.network('https://www.hola.com/imagenes/estar-bien/20190820147813/razas-perros-pequenos-parecen-grandes/0-711-550/razas-perro-pequenos-grandes-m.jpg',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only( left: 2.5, right: 2.5),
-                        height: size.height * 0.15,
-                        width: size.width * 0.2,
-                        color: Colors.black,
-                        child: Image.network('https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/59bbb29c5bafe878503c9872/husky-siberiano-bosque.jpg',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only( left: 2.5, right: 2.5),
-                        height: size.height * 0.15,
-                        width: size.width * 0.2,
-                        color: Colors.black,
-                        child: Image.network('https://phantom-expansion.unidadeditorial.es/04d5a7930d32e4860ba7cf82291b9d30/resize/640/assets/multimedia/imagenes/2021/03/18/16160714974849.jpg',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only( left: 2.5, right: 2.5),
-                        height: size.height * 0.15,
-                        width: size.width * 0.2,
-                        color: Colors.black,
-                        child: Image.network('https://www.hola.com/imagenes/estar-bien/20190820147813/razas-perros-pequenos-parecen-grandes/0-711-550/razas-perro-pequenos-grandes-m.jpg',
-                          fit: BoxFit.cover,
-                        ),
+                      ImageCard(
+                        onPressed: (){
+                          _showDialog( context,
+                            'https://www.hola.com/imagenes/estar-bien/20190820147813/razas-perros-pequenos-parecen-grandes/0-711-550/razas-perro-pequenos-grandes-m.jpg'
+                          );
+                        }, 
+                        size: size, 
+                        imgPath: 'https://www.hola.com/imagenes/estar-bien/20190820147813/razas-perros-pequenos-parecen-grandes/0-711-550/razas-perro-pequenos-grandes-m.jpg',
                       ),
                     ],
                   ),
@@ -220,11 +164,12 @@ class _ExampleState extends State<Example> {
         builder: (context) {
           return AlertDialog(
               content: Container(
-                height: MediaQuery.of(context).size.height * 0.6,
-                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height * 0.3,
+                width: MediaQuery.of(context).size.width * 0.5,
                 child: PhotoView(
                     imageProvider: NetworkImage(img,
-                    scale: 60.5
+                    
+                    // scale: 60.5
                   ),
                 )
               ),
