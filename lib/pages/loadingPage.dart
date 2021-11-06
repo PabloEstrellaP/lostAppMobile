@@ -44,26 +44,29 @@ class LoadingPage extends StatelessWidget {
   }
   
   Future checkLoginState( BuildContext context ) async {
+    Future.delayed(Duration(milliseconds: 4000), () async {
+      final response = await GoogleSignInService.renewToken();
 
-    final response = await GoogleSignInService.renewToken();
+      if( response['ok'] ){
+        GoogleSignInService.saveToken(response['token']);
+        Navigator.pushReplacement(
+          context, 
+          PageRouteBuilder(
+            pageBuilder: ( _, __, ___ ) => MenuPage(),
+            transitionDuration: Duration(milliseconds: 0)
+          )
+        );
+      }else{
+        Navigator.pushReplacement(
+          context, 
+          PageRouteBuilder(
+            pageBuilder: ( _, __, ___ ) => LoginPage(),
+            transitionDuration: Duration(milliseconds: 0)
+          )
+        );
+      }  // Do something
+    });
 
-    if( response['ok'] ){
-      GoogleSignInService.saveToken(response['token']);
-      Navigator.pushReplacement(
-        context, 
-        PageRouteBuilder(
-          pageBuilder: ( _, __, ___ ) => MenuPage(),
-          transitionDuration: Duration(milliseconds: 0)
-        )
-      );
-    }else{
-      Navigator.pushReplacement(
-        context, 
-        PageRouteBuilder(
-          pageBuilder: ( _, __, ___ ) => LoginPage(),
-          transitionDuration: Duration(milliseconds: 0)
-        )
-      );
-    }
+    
   }
 }
