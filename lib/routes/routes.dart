@@ -14,7 +14,7 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'loading'  : ( _ ) => LoadingPage(),
   'register' : ( _ ) => RegisterPage(),
   'details'  : ( _ ) => PetDetailsPage(),
-  'example'  : ( _ ) => Example()
+  'example'  : ( _ ) => LostPetRegister()
 
 };
 

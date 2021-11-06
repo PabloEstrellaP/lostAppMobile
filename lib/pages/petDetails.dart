@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter/rendering.dart';
+import 'package:flutterapp2/widgets/ActionButton.dart';
 import 'package:flutterapp2/widgets/CardData.dart';
 import 'package:flutterapp2/widgets/ImageCard.dart';
 import 'package:flutterapp2/widgets/Subtitle.dart';
+import 'package:flutterapp2/widgets/curvePainter.dart';
 import 'package:photo_view/photo_view.dart';
 
 class PetDetailsPage extends StatefulWidget {
@@ -21,7 +24,7 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.9,
+            // height: MediaQuery.of(context).size.height * 0.9,
             child: Column(
               children: [
                 Container(
@@ -131,26 +134,12 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
                     ],
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only( top: 10, left: 20, right: 20),
-                  child: MaterialButton(
-                    onPressed: (){},
-                    splashColor: Colors.transparent,
-                    // minWidth: size.width * 0.05,
-                    height: 40,
-                    color: Colors.green,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8)
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon( Icons.report, color: Colors.white,),
-                        Text( ' Reportar', style: TextStyle( color: Colors.white, fontSize: 17 ),)
-                      ],
-                    ),
-                  ),
-                )
+                ActionButton(
+                  text: 'Reportar', 
+                  icon: Icons.report,
+                  color: Colors.green,
+                  operation: (){},
+                ),
               ],
             ),
           ),
@@ -182,39 +171,5 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
           );
         }
     );
-  }
-}
-
-class CurvedPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    var rect = Offset.zero & size;
-    var paint = Paint()
-      // ..color = Color.fromRGBO(0, 186, 255, 1)
-      ..strokeWidth = 15;
-    paint.shader = LinearGradient(
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-      colors: [
-        Color.fromRGBO(0, 186, 255, 1),
-        Color.fromRGBO(85, 167, 198, 1),
-      ],
-    ).createShader(rect);
-    var path = Path();
-
-    path.moveTo(0, size.height * 0.7);
-    path.quadraticBezierTo(size.width * 0.25, size.height * 0.7,
-        size.width * 0.5, size.height * 0.8);
-    path.quadraticBezierTo(size.width * 0.75, size.height * 0.9,
-        size.width * 1.0, size.height * 0.8);
-    path.lineTo(size.width, -size.height);
-    path.lineTo(0, -size.height);
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
   }
 }
