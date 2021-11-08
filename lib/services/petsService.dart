@@ -9,7 +9,7 @@ class PetService{
   static Future addPet( Pet bodyA ) async {
     try{
       
-      final add = getPath( '/' );
+      final add = _getPath( '/' );
       final session = await http.post( add, 
         body: bodyA.toJson()
       );
@@ -21,7 +21,19 @@ class PetService{
     }
   }
 
-  static getPath( pathService ){
+  static Future getPet( String id ) async{
+    try{
+      final get = _getPath( '/' + id );
+      final session = await http.get( get );
+      return jsonDecode(session.body);
+    }
+    catch(e){
+      print(e);
+      return null;
+    }
+  }
+
+  static _getPath( pathService ){
     return Uri(
       scheme: Environment.scheme,
       host: Environment.host,

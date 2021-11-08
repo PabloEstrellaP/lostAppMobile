@@ -26,13 +26,15 @@
   Pet.fromJson(Map <String, dynamic> json)
       : name = json['name'],
         gender = json['gender'],
-        age = json['age'],
+        age = json['age'].toString(),
         breed = json['breed'],
         description = json['description'],
         profileImg = json['profileImg'],
-        objIMG = json['objIMG'],
-        date = json['date'],
-        id = json['_id'];
+        objIMG = List<ObjectImage>.from(jsonDecode(json["objIMG"]).map((model)=> ObjectImage.fromJson(model))), 
+        date = DateTime.parse(json['date']), 
+        // jsonDecode(json['date']),
+        id = json['uid'];
+
 
   Map<String, dynamic> toJson(){
   return {

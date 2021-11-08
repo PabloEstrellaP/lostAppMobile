@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter/rendering.dart';
+import 'package:flutterapp2/models/pet.dart';
+import 'package:flutterapp2/services/petsService.dart';
 import 'package:flutterapp2/widgets/ActionButton.dart';
 import 'package:flutterapp2/widgets/CardData.dart';
 import 'package:flutterapp2/widgets/ImageCard.dart';
@@ -16,6 +18,17 @@ class PetDetailsPage extends StatefulWidget {
 }
 
 class _PetDetailsPageState extends State<PetDetailsPage> {
+  
+  Pet? petData;
+
+
+  @override
+  void initState (){
+    super .initState ();
+    _getPetDetails('6188c12978fbc33778a11a32');
+
+  }
+
   @override
   Widget build(BuildContext context) {
   Size size = MediaQuery.of(context).size;
@@ -38,7 +51,7 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           CircleAvatar(
-                            backgroundImage: NetworkImage('https://www.hola.com/imagenes/estar-bien/20190820147813/razas-perros-pequenos-parecen-grandes/0-711-550/razas-perro-pequenos-grandes-m.jpg'),
+                            backgroundImage: NetworkImage( petData!.profileImg ),
                             maxRadius: size.height * 0.12,
                           ),
                           SizedBox(
@@ -48,11 +61,11 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               CardData(
-                                title: 'Pato',
+                                title: '${petData!.name}',
                                 SubTitle: 'Nombre',
                               ),
                               CardData(
-                                title: 'Macho',
+                                title: '${petData!.gender}',
                                 SubTitle: 'Genero',
                               ),
                             ],
@@ -61,11 +74,11 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               CardData(
-                                title: 'Husky',
+                                title: '${petData!.breed}',
                                 SubTitle: 'Raza',
                               ),
                               CardData(
-                                title: '1 año',
+                                title: '${petData!.age == 1 ? petData!.age + ' año' : petData!.age + ' años'}',
                                 SubTitle: 'Edad',
                               ),
                             ],
@@ -84,7 +97,7 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
                 ),
                 Container(
                   margin: const EdgeInsets.only( left: 10, right: 10),
-                  child: Text("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                  child: Text("${petData!.description}",
                     style: TextStyle( fontSize: size.width * 0.04),
                   ),
                 ),
@@ -103,35 +116,7 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
                   width: size.width * 0.9,
                   child: ListView(
                     scrollDirection: Axis.horizontal, 
-                    children: [
-                      ImageCard(
-                        onPressed: (){
-                          _showDialog( context,
-                            'https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/59bbb29c5bafe878503c9872/husky-siberiano-bosque.jpg'
-                          );
-                        }, 
-                        size: size, 
-                        imgPath: 'https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/59bbb29c5bafe878503c9872/husky-siberiano-bosque.jpg',
-                      ),
-                      ImageCard(
-                        onPressed: (){
-                          _showDialog( context,
-                            'https://phantom-expansion.unidadeditorial.es/04d5a7930d32e4860ba7cf82291b9d30/resize/640/assets/multimedia/imagenes/2021/03/18/16160714974849.jpg'
-                          );
-                        }, 
-                        size: size, 
-                        imgPath: 'https://phantom-expansion.unidadeditorial.es/04d5a7930d32e4860ba7cf82291b9d30/resize/640/assets/multimedia/imagenes/2021/03/18/16160714974849.jpg',
-                      ),
-                      ImageCard(
-                        onPressed: (){
-                          _showDialog( context,
-                            'https://www.hola.com/imagenes/estar-bien/20190820147813/razas-perros-pequenos-parecen-grandes/0-711-550/razas-perro-pequenos-grandes-m.jpg'
-                          );
-                        }, 
-                        size: size, 
-                        imgPath: 'https://www.hola.com/imagenes/estar-bien/20190820147813/razas-perros-pequenos-parecen-grandes/0-711-550/razas-perro-pequenos-grandes-m.jpg',
-                      ),
-                    ],
+                    children: _getListings( size ),
                   ),
                 ),
                 ActionButton(
@@ -171,5 +156,39 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
           );
         }
     );
+  }
+
+  Future _getPetDetails( String id ) async {
+    final response = await PetService.getPet(id);
+    if( response['ok'] ){
+      setState(() {
+        petData = Pet.fromJson(response['msg']);
+          
+      });
+    }else{
+      return null;
+    }
+  }
+
+  List<ImageCard> _getListings( Size size) { 
+    
+    List<ImageCard> info = [];
+    int index = 0;
+    petData!.objIMG.forEach((i){
+      info.add(
+        new ImageCard(
+          onPressed: (){
+            _showDialog( context,
+              'https://firebasestorage.googleapis.com/v0/b/lostpet-ccadb.appspot.com/o${petData!.objIMG[index].name}?alt=media&token=${petData!.objIMG[index].token}'              
+              // 'https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/59bbb29c5bafe878503c9872/husky-siberiano-bosque.jpg'
+            );
+          }, 
+          size: size, 
+          imgPath: 'https://firebasestorage.googleapis.com/v0/b/lostpet-ccadb.appspot.com/o${petData!.objIMG[index].name}?alt=media&token=${petData!.objIMG[index].token}',
+        )
+      );
+      index++;
+    });
+     return info;
   }
 }
