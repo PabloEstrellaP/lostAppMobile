@@ -1,14 +1,20 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:photo_view/photo_view.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path/path.dart';
 
+import 'package:flutterapp2/models/pet.dart';
+import 'package:flutterapp2/services/firebaseService.dart';
+import 'package:flutterapp2/services/petsService.dart';
 import 'package:flutterapp2/widgets/ActionButton.dart';
 import 'package:flutterapp2/widgets/customDropdown.dart';
 import 'package:flutterapp2/widgets/customInput.dart';
 import 'package:flutterapp2/widgets/curvePainter.dart';
+import 'package:path_provider/path_provider.dart';
 
 class LostPetRegister extends StatefulWidget {
   LostPetRegister({Key? key}) : super(key: key);
@@ -23,20 +29,29 @@ class LostPetRegisterState extends State<LostPetRegister> {
   final breedCtrl = TextEditingController();
   final descriptionCtrl = TextEditingController();
   
+  String imgProf = ''; 
   String gender = 'Masculino';
   List<String> genderes = ['Masculino', 'Femenino'];
 
   String age = '1';
   List<String> ages = [];
+  List<ObjectImage> listObjIMG = [];
   
+  UploadTask? task;
   List<File>? file = [];
+  File? fileProfile;
+
+  String _id = '';
   double amount = 0;
 
+  Pet? newPet;
 
   @override
   void initState (){
     super .initState ();
+    getImageFileFromAssets('perro.png');
     _generateAge();
+
   }
 
   @override
@@ -85,14 +100,16 @@ class LostPetRegisterState extends State<LostPetRegister> {
                                   fit: StackFit.expand,
                                   children: [
                                     CircleAvatar(
-                                      backgroundImage: NetworkImage('https://www.attendit.net/images/easyblog_shared/July_2018/7-4-18/totw_network_profile_400.jpg'),
+                                    backgroundImage:
+                                      // imgPro
+                                      new FileImage(fileProfile!)
                                     ),
                                     Positioned(
                                       bottom: 0,
                                       right: -25,
                                       child: RawMaterialButton(
                                         onPressed: () {
-                                          print('Hola mundo');
+                                          _selectProfileFile();
                                         },
                                         elevation: 2.0,
                                         fillColor: Color(0xFFF5F6F9),
@@ -203,7 +220,11 @@ class LostPetRegisterState extends State<LostPetRegister> {
                   text: 'Registrar', 
                   icon: Icons.add, 
                   color: Colors.green,
-                  operation: (){},
+                  operation: () async{
+                    print('Entré');
+                    await addPet();
+                    print('Salí');
+                  },
                 ),
               ],
             ),
@@ -233,6 +254,56 @@ class LostPetRegisterState extends State<LostPetRegister> {
     });
   }
 
+  Future _selectProfileFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: false,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg'],
+    );
+    if (result == null) return;
+    final img = result.files.single.path!;
+    setState((){
+      fileProfile = File(img);
+    });
+  }
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png', 'jpeg'],
+    );
+    if (result == null) return;
+    List<File> files = result.paths.map((path) => File(path!)).toList();
+    setState(() => file = files);
+  }
+
+  Future uploadFile( eachFile, int i, bool isProfile ) async {
+    if (eachFile == null) return;
+    
+    final fileName = basename(eachFile.toString());
+    final destination = '/hola${i.toString()}';
+
+    task = FirebaseService.uploadFile(destination, eachFile);
+    setState(() {});
+
+    if (task == null) return;
+
+    final snapshot = await task!.whenComplete(() {});
+    final urlDownload = await snapshot.ref.getDownloadURL();
+    print(newPet);
+    if( isProfile ){
+      setState(() {
+        imgProf = urlDownload;
+      });
+    }else{
+      listObjIMG.add( new ObjectImage(name: destination, token: urlDownload.substring( urlDownload.length - 36 )));
+    }
+    print('Download-Link: $urlDownload');
+    print(destination);
+    print(urlDownload.substring( urlDownload.length - 36 ));
+  }
+
   _showDialog(BuildContext ctx, File img) {
     showDialog(context: ctx,
         builder: (context) {
@@ -258,5 +329,34 @@ class LostPetRegisterState extends State<LostPetRegister> {
           );
         }
     );
+  }
+  Future<File> getImageFileFromAssets(String path) async {
+    File IMG = File('${(await getTemporaryDirectory()).path}/$path');
+    setState((){
+      fileProfile = IMG;
+    });
+    return IMG;
+  }
+
+  Future addPet() async {
+    listObjIMG = [];
+    await uploadFile( fileProfile, 100, true );
+
+    for( int i = 0; i < file!.length; i++){
+      await uploadFile( file![i], i, false );
+
+    }
+    newPet = new Pet(
+      name: nameCtrl.text, 
+      gender: gender, 
+      age: age, 
+      breed: breedCtrl.text, 
+      description: descriptionCtrl.text, 
+      profileImg: imgProf, 
+      objIMG: listObjIMG, 
+      date: new DateTime(2000), 
+      id: 'id'
+    );
+    PetService.addPet( newPet! );
   }
 }
