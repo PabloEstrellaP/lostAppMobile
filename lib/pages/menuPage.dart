@@ -61,7 +61,7 @@ class _MenuPageState extends State<MenuPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.pushNamed(context, 'example');
+          Navigator.pushNamed(context, 'petRegi');
         },
         child: Icon(Icons.add),
       ),

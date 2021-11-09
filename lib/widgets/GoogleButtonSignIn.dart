@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapp2/helpers/dialog.dart';
 import 'package:flutterapp2/pages/menuPage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutterapp2/services/googleSignInService.dart';
@@ -25,18 +26,26 @@ class GoogleButtonSignIn extends StatelessWidget {
           borderRadius: BorderRadius.circular(8)
         ),
         onPressed: () async{
-          final response = await GoogleSignInService.signInWithGoogle( this.isLogin );
-          if( response['ok'] ){
-            await GoogleSignInService.saveToken(response['token'], response['msg']);
-            Navigator.pushReplacement(
-              context, 
-              PageRouteBuilder(
-                pageBuilder: ( _, __, ___ ) => MenuPage(),
-                transitionDuration: Duration(milliseconds: 0)
-              )
-            );
-          }else{
+          try{
             await GoogleSignInService.signOut();
+
+            CustomDialog.showVerifyData(context, MediaQuery.of(context).size);
+            final response = await GoogleSignInService.signInWithGoogle( this.isLogin );
+            if( response['ok'] ){
+              await GoogleSignInService.saveToken(response['token'], response['msg']);
+              CustomDialog.closeDialog(context);
+              Navigator.pushReplacement(
+                context, 
+                PageRouteBuilder(
+                  pageBuilder: ( _, __, ___ ) => MenuPage(),
+                  transitionDuration: Duration(milliseconds: 0)
+                )
+              );
+            }else{
+              await GoogleSignInService.signOut();
+            }
+          }catch(e){
+            CustomDialog.closeDialog(context);
           }
         },
         child: Row(

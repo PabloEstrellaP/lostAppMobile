@@ -1,5 +1,3 @@
- import 'dart:convert';
-
  class User {
   late final String name;
   late final String picturePath;

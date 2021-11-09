@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutterapp2/helpers/dialog.dart';
 import 'package:flutterapp2/models/user.dart';
 import 'package:flutterapp2/services/googleSignInService.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:path/path.dart';
+// import 'package:flutter/services.dart' show rootBundle;
+// import 'package:path/path.dart';
 
 import 'package:flutterapp2/models/pet.dart';
 import 'package:flutterapp2/services/firebaseService.dart';
@@ -47,6 +48,9 @@ class LostPetRegisterState extends State<LostPetRegister> {
 
   Pet? newPet;
   User? newUser;
+
+  int porcent = 0;
+  int sumPorc = 0;
 
   @override
   void initState (){
@@ -224,9 +228,15 @@ class LostPetRegisterState extends State<LostPetRegister> {
                   icon: Icons.add, 
                   color: Colors.green,
                   operation: () async{
+                    porcent = (100 / 2 + file!.length).floor();
+                    CustomDialog.showDialog(context, size);
                     print('Entré');
                     await addPet();
                     print('Salí');
+                    setState(() {
+                      porcent = porcent + sumPorc;
+                    });
+                    CustomDialog.closeDialog(context);
                   },
                 ),
               ],
@@ -338,9 +348,15 @@ class LostPetRegisterState extends State<LostPetRegister> {
     listObjIMG = [];
     await uploadFile( fileProfile, 100, true );
 
+    setState(() {
+      porcent = porcent + sumPorc;
+    });
+
     for( int i = 0; i < file!.length; i++){
       await uploadFile( file![i], i, false );
-
+      setState(() {
+        porcent = porcent + sumPorc;
+      });
     }
     newPet = new Pet(
       name: nameCtrl.text, 

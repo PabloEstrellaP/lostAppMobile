@@ -39,6 +39,11 @@ dependencies:
   firebase_storage: ^8.0.3
   file_picker: ^3.0.1
   google_fonts: ^2.1.0
+  
+  bordered_text: ^2.0.0
+  loading_animations: ^2.2.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
