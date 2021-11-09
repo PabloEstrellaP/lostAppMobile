@@ -11,7 +11,12 @@ import 'package:flutterapp2/widgets/curvePainter.dart';
 import 'package:photo_view/photo_view.dart';
 
 class PetDetailsPage extends StatefulWidget {
-  PetDetailsPage({Key? key}) : super(key: key);
+
+  final Pet? littlePet;
+
+  PetDetailsPage({Key? key, 
+    this.littlePet
+  }) : super(key: key);
 
   @override
   _PetDetailsPageState createState() => _PetDetailsPageState();
@@ -24,8 +29,9 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
 
   @override
   void initState (){
+    petData = widget.littlePet;
     super .initState ();
-    _getPetDetails('6188c12978fbc33778a11a32');
+    // _getPetDetails('6188c12978fbc33778a11a32');
 
   }
 
@@ -116,7 +122,7 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
                   width: size.width * 0.9,
                   child: ListView(
                     scrollDirection: Axis.horizontal, 
-                    children: _getListings( size ),
+                    children: _getListings( size, context ),
                   ),
                 ),
                 ActionButton(
@@ -158,37 +164,23 @@ class _PetDetailsPageState extends State<PetDetailsPage> {
     );
   }
 
-  Future _getPetDetails( String id ) async {
-    final response = await PetService.getPet(id);
-    if( response['ok'] ){
-      setState(() {
-        petData = Pet.fromJson(response['msg']);
-          
-      });
-    }else{
-      return null;
-    }
-  }
-
-  List<ImageCard> _getListings( Size size) { 
+  List<ImageCard> _getListings( Size size, BuildContext context ) { 
     
     List<ImageCard> info = [];
-    int index = 0;
-    petData!.objIMG.forEach((i){
+    for( int i = 0; i < petData!.objIMG.length; i++){
       info.add(
         new ImageCard(
           onPressed: (){
             _showDialog( context,
-              'https://firebasestorage.googleapis.com/v0/b/lostpet-ccadb.appspot.com/o${petData!.objIMG[index].name}?alt=media&token=${petData!.objIMG[index].token}'              
+              'https://firebasestorage.googleapis.com/v0/b/lostpet-ccadb.appspot.com/o${petData!.objIMG[i].name}?alt=media&token=${petData!.objIMG[i].token}'              
               // 'https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/59bbb29c5bafe878503c9872/husky-siberiano-bosque.jpg'
             );
           }, 
           size: size, 
-          imgPath: 'https://firebasestorage.googleapis.com/v0/b/lostpet-ccadb.appspot.com/o${petData!.objIMG[index].name}?alt=media&token=${petData!.objIMG[index].token}',
+          imgPath: 'https://firebasestorage.googleapis.com/v0/b/lostpet-ccadb.appspot.com/o${petData!.objIMG[i].name}?alt=media&token=${petData!.objIMG[i].token}',
         )
       );
-      index++;
-    });
-     return info;
+    }
+    return info;
   }
 }

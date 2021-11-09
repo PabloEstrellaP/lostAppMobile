@@ -27,7 +27,7 @@ class GoogleButtonSignIn extends StatelessWidget {
         onPressed: () async{
           final response = await GoogleSignInService.signInWithGoogle( this.isLogin );
           if( response['ok'] ){
-            await GoogleSignInService.saveToken(response['token']);
+            await GoogleSignInService.saveToken(response['token'], response['msg']);
             Navigator.pushReplacement(
               context, 
               PageRouteBuilder(

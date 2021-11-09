@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutterapp2/global/environment.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutterapp2/models/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,7 +48,6 @@ class GoogleSignInService {
     
     try{
       final response = getPath('/renew');
-      print(response);
       final isRenewToken = await http.get( response, 
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +55,7 @@ class GoogleSignInService {
         }
       );
       final body = jsonDecode(isRenewToken.body);
-    return body;
+      return body;
     }catch( err ){
       print( err );
     }
@@ -65,8 +65,12 @@ class GoogleSignInService {
     await _googleSignIn.signOut();
   }
 
-  static Future saveToken( token ) async {
+  static Future saveToken( token, userData ) async {
     final _storage = FlutterSecureStorage();
+    await _storage.write(key: 'name', value: userData['name']);
+    await _storage.write(key: 'email', value: userData['email']);
+    await _storage.write(key: 'picturePath', value: userData['picturePath']);
+    await _storage.write(key: 'id', value: userData['uid']);
     return await _storage.write(key: 'token', value: token);
   }
 
@@ -78,8 +82,16 @@ class GoogleSignInService {
   static Future getToken() async {
     final _storage = FlutterSecureStorage();
     final token = await _storage.read(key: 'token');
-    print(token);
     return token == null ? '' : token;
+  }
+
+  static Future getAllUserData() async {
+    final _storage = FlutterSecureStorage();
+    final name = await _storage.read(key: 'name');
+    final email = await _storage.read(key: 'email');
+    final id = await _storage.read(key: 'id');
+    final picturePath = await _storage.read(key: 'picturePath');
+    return User(name: name.toString(), picturePath: picturePath.toString(), email: email.toString(), id: id.toString());
   }
 
   static getPath( pathService ){

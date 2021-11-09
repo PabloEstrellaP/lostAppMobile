@@ -48,7 +48,7 @@ class LoadingPage extends StatelessWidget {
       final response = await GoogleSignInService.renewToken();
 
       if( response['ok'] ){
-        GoogleSignInService.saveToken(response['token']);
+        GoogleSignInService.saveToken(response['token'], response['msg']);
         Navigator.pushReplacement(
           context, 
           PageRouteBuilder(

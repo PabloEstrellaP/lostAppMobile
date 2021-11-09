@@ -33,6 +33,18 @@ class PetService{
     }
   }
 
+  static Future getPets() async{
+    try{
+      final get = _getPath( '/' );
+      final session = await http.get( get );
+      return jsonDecode(session.body);
+    }
+    catch(e){
+      print(e);
+      return null;
+    }
+  }
+
   static _getPath( pathService ){
     return Uri(
       scheme: Environment.scheme,

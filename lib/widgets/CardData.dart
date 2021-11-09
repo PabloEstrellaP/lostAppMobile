@@ -22,8 +22,8 @@ class CardData extends StatelessWidget {
               height: MediaQuery.of(context).size.height * 0.076,
               child: ListTile(  
                 leading: Icon( Icons.pets ),  
-                title:  Text(this.title,),
-                subtitle: Text(this.SubTitle, style: TextStyle( fontSize: 12),),
+                title:  Text(this.title, style: TextStyle( fontSize: MediaQuery.of(context).size.width * 0.038),),
+                subtitle: Text(this.SubTitle, style: TextStyle( fontSize: 12 ),),
               ),
             ),  
           ],  
