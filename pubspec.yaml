@@ -42,6 +42,7 @@ dependencies:
   
   bordered_text: ^2.0.0
   loading_animations: ^2.2.0
+  animations: ^2.0.2
 
 
 dev_dependencies:

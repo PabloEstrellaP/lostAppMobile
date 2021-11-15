@@ -49,6 +49,8 @@
     "id" : this.id,
   };
 }
+
+  void add(Pet pet) {}
 }
 
 class ObjectImage{

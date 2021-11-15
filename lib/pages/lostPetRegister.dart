@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bordered_text/bordered_text.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -87,10 +88,14 @@ class LostPetRegisterState extends State<LostPetRegister> {
                           SizedBox(
                             height: size.height * 0.01,
                           ),
-                          Text('Pet Register', style: GoogleFonts.pacifico(
-                              textStyle: TextStyle(
-                                color: Colors.white, 
-                                fontSize: size.height * 0.04,
+                          BorderedText(
+                            strokeWidth: 2,
+                            strokeColor: Colors.black,
+                            child: Text('Pet Register', style: GoogleFonts.pacifico(
+                                textStyle: TextStyle(
+                                  color: Colors.white, 
+                                  fontSize: size.height * 0.04,
+                                ),
                               ),
                             ),
                           ),
