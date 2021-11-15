@@ -7,6 +7,7 @@ import 'package:flutterapp2/pages/menuPage.dart';
 import 'package:flutterapp2/pages/petDetails.dart';
 import 'package:flutterapp2/pages/registerPage.dart';
 import 'package:flutterapp2/pages/example.dart';
+import 'package:flutterapp2/pages/userProfile.dart';
 
 final Map<String, Widget Function(BuildContext)> appRoutes = {
 
@@ -16,8 +17,8 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'register' : ( _ ) => RegisterPage(),
   'details'  : ( _ ) => PetDetailsPage(),
   'petRegi'  : ( _ ) => LostPetRegister(),
-  'example'  : ( _ ) => Example()
-
+  'example'  : ( _ ) => Example(),
+  'profile'  : ( _ ) => UserProfile()
 };
 
 

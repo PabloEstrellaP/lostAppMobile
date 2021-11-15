@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:animations/animations.dart';
 import 'package:bordered_text/bordered_text.dart';
+import 'package:flutterapp2/pages/lostPetRegister.dart';
+import 'package:flutterapp2/widgets/SideMenu.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutterapp2/widgets/petCard.dart';
@@ -24,6 +26,7 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      drawer: NavDrawer(),
       // backgroundColor: Colors.black,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -111,7 +114,16 @@ class _MenuPageState extends State<MenuPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
-          Navigator.pushNamed(context, 'petRegi');
+          // _OpenContainerWrapperAdd(
+            
+          //   closedBuilder: (BuildContext _, VoidCallback openContainer) {
+          //     return FloatingActionButton(onPressed: onPressed)( 
+          //       size: size,
+          //       function: openContainer,
+          //     );                               
+          //   },
+          //   onClosed: _showMarkedAsDoneSnackbar,
+          // );
         },
         child: Icon(Icons.add),
       ),
@@ -156,6 +168,36 @@ class _OpenContainerWrapper extends StatelessWidget {
       transitionType: ContainerTransitionType.fade,
       openBuilder: (BuildContext context, VoidCallback _) {
         return PetDetailsPage( littlePet: pet);
+      },
+      onClosed: onClosed,
+      transitionDuration: Duration(milliseconds: 400) ,
+      tappable: false,
+      closedBuilder: closedBuilder,
+    );
+  }
+}
+
+
+class _OpenContainerWrapperAdd extends StatelessWidget {
+  const _OpenContainerWrapperAdd({
+    required this.closedBuilder,
+    // required this.transitionType,
+    required this.onClosed,
+  });
+
+  final CloseContainerBuilder closedBuilder;
+  // final ContainerTransitionType transitionType;
+  final ClosedCallback<bool?> onClosed;
+  @override
+  Widget build(BuildContext context) {
+    return OpenContainer<bool>(
+      closedElevation: 0,
+      openElevation: 0,
+      openColor: Colors.transparent,
+      closedColor: Colors.transparent,
+      transitionType: ContainerTransitionType.fade,
+      openBuilder: (BuildContext context, VoidCallback _) {
+        return LostPetRegister();
       },
       onClosed: onClosed,
       transitionDuration: Duration(milliseconds: 400) ,
