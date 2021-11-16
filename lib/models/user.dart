@@ -15,7 +15,7 @@
       : name = json['name'],
         picturePath = json['picturePath'],
         email = json['email'],
-        id = json['uid'];
+        id = json['_id'];
 
 
   Map<String, dynamic> toJson(){

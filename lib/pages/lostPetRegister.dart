@@ -363,15 +363,18 @@ class LostPetRegisterState extends State<LostPetRegister> {
         porcent = porcent + sumPorc;
       });
     }
+    print(newUser!.id);
     newPet = new Pet(
       name: nameCtrl.text, 
       gender: gender, 
-      age: age, 
+      age: age,
+      isLost: true,
       breed: breedCtrl.text, 
       description: descriptionCtrl.text, 
       profileImg: imgProf, 
       objIMG: listObjIMG, 
-      date: new DateTime(2000), 
+      date: new DateTime(2000),
+      user: newUser!,
       id: 'id'
     );
     PetService.addPet( newPet! );

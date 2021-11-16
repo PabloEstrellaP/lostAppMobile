@@ -8,7 +8,6 @@ class PetService{
 
   static Future addPet( Pet bodyA ) async {
     try{
-      
       final add = _getPath( '/' );
       final session = await http.post( add, 
         body: bodyA.toJson()
@@ -49,7 +48,7 @@ class PetService{
     return Uri(
       scheme: Environment.scheme,
       host: Environment.host,
-      // port: 8080,
+      port: 8080,
       path: '/api/pet' + pathService
     );
   }
