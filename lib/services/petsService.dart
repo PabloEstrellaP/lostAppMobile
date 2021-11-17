@@ -20,6 +20,31 @@ class PetService{
     }
   }
 
+  static Future putPet( Pet bodyA ) async {
+    try{
+      final add = _getPath( '/' );
+      final session = await http.put( add, 
+        body: bodyA.toJson()
+      );
+
+      return jsonDecode( session.body );
+    }catch(e){
+      print(e);
+      return null;
+    }
+  }
+
+  static Future deletePet( Pet bodyA ) async {
+    try{
+      final delete = _getPath( '/' + bodyA.id );
+      final session = await http.delete(delete);
+      return jsonDecode(session.body);
+    }catch(e){
+      print(e);
+      return null;
+    }
+  }
+
   static Future getPet( String id ) async{
     try{
       final get = _getPath( '/' + id );
@@ -27,6 +52,23 @@ class PetService{
       return jsonDecode(session.body);
     }
     catch(e){
+      print(e);
+      return null;
+    }
+  }
+
+  static Future getPetByUser( String id, isLost ) async{
+    try{
+      final post = _getPath( '/byUser' );
+      final session = await http.post( post, 
+        body: {
+          'id' : id, 
+          'isLost': isLost.toString()
+        }
+      );
+
+      return jsonDecode(session.body);
+    }catch(e){
       print(e);
       return null;
     }

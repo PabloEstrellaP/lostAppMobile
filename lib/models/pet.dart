@@ -55,7 +55,7 @@ import 'package:flutterapp2/models/user.dart';
     "objIMG" : jsonEncode(this.objIMG),
     "date" : this.date.toString(),
     "user" :  jsonEncode(this.user),
-    "isLost": this.isLost,
+    "isLost": this.isLost.toString(),
     "id" : this.id,
   };
 }
