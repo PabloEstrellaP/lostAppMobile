@@ -26,8 +26,13 @@ class NavDrawer extends StatelessWidget {
             onTap: () => {Navigator.pushReplacementNamed(context, '/')},
           ),
           ListTile(
+            leading: Icon(Icons.notifications),
+            title: Text('Notificaciones'),
+            onTap: () => {Navigator.pushReplacementNamed(context, 'notifications')},
+          ),
+          ListTile(
             leading: Icon(Icons.account_circle),
-            title: Text('Profile'),
+            title: Text('Perfil'),
             onTap: () => {Navigator.pushReplacementNamed(context, 'profile')},
           ),
         ],

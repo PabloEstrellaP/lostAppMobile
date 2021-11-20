@@ -47,7 +47,7 @@ class _MenuPageState extends State<MenuPage> {
                           BorderedText(
                             strokeWidth: 2,
                             strokeColor: Colors.black,
-                            child: Text('Pet Register', style: GoogleFonts.pacifico(
+                            child: Text('Menú', style: GoogleFonts.pacifico(
                                 textStyle: TextStyle(
                                   color: Colors.white, 
                                   fontSize: size.height * 0.04,
