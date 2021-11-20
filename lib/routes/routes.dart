@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutterapp2/pages/chatPage.dart';
 
 import 'package:flutterapp2/pages/loadingPage.dart';
 import 'package:flutterapp2/pages/loginPage.dart';
@@ -20,7 +21,8 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'petRegi'       : ( _ ) => LostPetRegister(),
   'example'       : ( _ ) => Example(),
   'profile'       : ( _ ) => UserProfile(),
-  'notifications' : ( _ ) => NotificationsPage()
+  'notifications' : ( _ ) => NotificationsPage(),
+  'chat'          : ( _ ) => ChatPage()
 };
 
 

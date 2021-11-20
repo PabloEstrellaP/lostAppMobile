@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutterapp2/models/reports.dart';
+import 'package:flutterapp2/pages/chatPage.dart';
 
 class NotificationItem extends StatelessWidget {
   
@@ -21,6 +22,10 @@ class NotificationItem extends StatelessWidget {
       child: InkWell(
         onTap: (){
           print(this.report.pet.id);
+          Navigator.push(context, PageRouteBuilder(
+            pageBuilder: ( _, __, ___ ) => ChatPage(littleReport: this.report),
+            transitionDuration: Duration(milliseconds: 0)
+          ));
         },
         child: Card(
           color: Color.fromRGBO(251, 242, 240, 1),
