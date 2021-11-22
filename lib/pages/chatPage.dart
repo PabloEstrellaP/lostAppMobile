@@ -54,7 +54,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin{
   }
   void _cargarHistorial( /*String usuarioID*/ ) async {
     List<Report> chat = [];
-    final response = await ReportsService.getChat();
+    final response = await ReportsService.getChat( stateReport! );
     for( var dataJson in response['msg']){
       chat.add(new Report.fromJson(dataJson));
     }

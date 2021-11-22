@@ -33,9 +33,9 @@ class ReportsService{
     }
   }
 
-  static Future getChat( /*Report report*/ ) async {
+  static Future getChat( Report report ) async {
     try{
-      final get = _getPath( '/chat/user/6189b925b416c16f3c599213' /*+ report.id*/ );
+      final get = _getPath( '/chat/user/' + report.pet.id );
       final session = await http.get( get );
 
       return jsonDecode( session.body );
