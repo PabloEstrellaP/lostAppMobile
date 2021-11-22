@@ -4,6 +4,7 @@ import 'package:bordered_text/bordered_text.dart';
 import 'package:flutterapp2/models/reports.dart';
 import 'package:flutterapp2/services/reportsService.dart';
 import 'package:flutterapp2/widgets/SideMenu.dart';
+import 'package:flutterapp2/widgets/customFloatingActionButton.dart';
 import 'package:flutterapp2/widgets/notificationItem.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutterapp2/widgets/curvePainter.dart';
@@ -80,6 +81,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           ),
         )
       ),
+      floatingActionButton: CustomFloatingActionButton(),
     );
   }
 

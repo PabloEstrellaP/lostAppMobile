@@ -7,7 +7,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutterapp2/helpers/dialog.dart';
 import 'package:flutterapp2/models/user.dart';
 import 'package:flutterapp2/pages/petDetails.dart';
+import 'package:flutterapp2/pages/userProfile.dart';
 import 'package:flutterapp2/services/googleSignInService.dart';
+import 'package:flutterapp2/widgets/CustomAlertDialog.dart';
 import 'package:flutterapp2/widgets/ImageCard.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:flutter/services.dart' show rootBundle;
@@ -294,11 +296,7 @@ class LostPetEditState extends State<LostPetEdit> {
                   icon: Icons.edit, 
                   color: Colors.green,
                   operation: () async{
-                    CustomDialog.showDialog(context, size);
-                    print('Entré');
-                    await _editPet();
-                    print('Salí');
-                    CustomDialog.closeDialog(context);
+                    await _editPetDialog( context, size );
                   },
                 ),
                 ActionButton(
@@ -306,12 +304,7 @@ class LostPetEditState extends State<LostPetEdit> {
                   icon: Icons.delete, 
                   color: Colors.red,
                   operation: () async{
-                    porcent = (100 / 2 + file!.length).floor();
-                    CustomDialog.showDialog(context, size);
-                    print('Entré');
-                    await _deletePet();
-                    print('Salí');
-                    CustomDialog.closeDialog(context);
+                    await _deletePetDialog( context, size );
                   },
                 ),
                 ActionButton(
@@ -330,37 +323,89 @@ class LostPetEditState extends State<LostPetEdit> {
     );
   }
 
+  Future<void> _deletePetDialog( BuildContext context, Size size ) async {
+    showDialog(
+      context: context, 
+      builder: (BuildContext context){
+        return CustomAlertDialog(
+          title: '¿Seguro de eliminar esta mascota?',
+          text: 'Cancelar',
+          text2: 'Aceptar',
+          color: Colors.red,
+          color2: Colors.green,
+          function: (){
+            Navigator.pop(context);
+          },
+          function2: () async{
+            CustomDialog.showDialog(context, size);
+            _generatePet();
+            // await PetService.deletePet( newPet! );
+            CustomDialog.closeDialog(context);
+            Navigator.pop(context);
+            _goToHome( context, size, '¡Se ha eliminado con éxito!' );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _editPetDialog( BuildContext context, Size size ) async {
+    showDialog(
+      context: context, 
+      builder: (BuildContext context){
+        return CustomAlertDialog(
+          title: '¿Seguro de editar esta mascota?',
+          text: 'Cancelar',
+          text2: 'Aceptar',
+          color: Colors.red,
+          color2: Colors.green,
+          function: (){
+            Navigator.pop(context);
+          },
+          function2: () async{
+            CustomDialog.showDialog(context, size);
+            _generatePet();
+            await PetService.putPet( newPet! );
+            CustomDialog.closeDialog(context);
+            Navigator.pop(context);
+            _goToHome( context, size, '¡Se ha editado con éxito!' );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _goToHome( BuildContext context, Size size, String title) async {
+    showDialog(
+      context: context, 
+      builder: (BuildContext context){
+        return CustomAlertDialog(
+          isOnlyAllow: true,
+          title: title,
+          text: 'Aceptar',
+          text2: '------',
+          color: Colors.green,
+          color2: Colors.red,
+          function: (){
+            Navigator.pop(context);
+            Navigator.pushReplacement(context, 
+              PageRouteBuilder(
+                pageBuilder: ( _, __, ___ ) => UserProfile(),
+                transitionDuration: Duration(milliseconds: 2)
+            ));
+          },
+          function2: () async{
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
+  }
+
   void _generateAge(){
     for( int i = 1; i <= 50; i++ ){
       ages.add( i.toString() );
     }
-  }
-
-  Future _selectFile() async {
-    final result = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png', 'jpeg'],
-    );
-    if (result == null) return;
-    List<File> files = result.paths.map((path) => File(path!)).toList();
-    setState((){
-      file = files;
-      amount = 0.14 * (files.length / 3).ceil();
-    });
-  }
-
-  Future _selectProfileFile() async {
-    final result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png', 'jpeg'],
-    );
-    if (result == null) return;
-    final img = result.files.single.path!;
-    setState((){
-      fileProfile = File(img);
-    });
   }
 
   Future uploadFile( eachFile, int i, bool isProfile ) async {
@@ -387,32 +432,6 @@ class LostPetEditState extends State<LostPetEdit> {
     }
   }
 
-  _showDialog(BuildContext ctx, File img) {
-    showDialog(context: ctx,
-        builder: (context) {
-          return AlertDialog(
-              content: Container(
-                height: MediaQuery.of(context).size.height * 0.3,
-                width: MediaQuery.of(context).size.width * 0.5,
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: new FileImage(img),
-                    ),
-                  ),
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.pop(context, 'OK'),
-                  child: const Text('OK'),
-                ),
-              ],
-          );
-        }
-    );
-  }
   Future<File> getImageFileFromAssets(String path) async {
     File IMG = File('${(await getTemporaryDirectory()).path}/$path');
     setState((){
@@ -433,17 +452,7 @@ class LostPetEditState extends State<LostPetEdit> {
       PageRouteBuilder(
         pageBuilder: ( _, __, ___ ) => PetDetailsPage( littlePet: newPet,),
         transitionDuration: Duration(milliseconds: 2)
-      ));
-  }
-
-  Future _editPet() async {
-    _generatePet();
-    PetService.putPet( newPet! );
-  }
-
-  Future _deletePet() async {
-    _generatePet();
-    PetService.deletePet( newPet! );
+    ));
   }
 
   void _generatePet(){
@@ -506,5 +515,7 @@ class LostPetEditState extends State<LostPetEdit> {
         }
     );
   }
+
+  
 
 }

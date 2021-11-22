@@ -8,6 +8,8 @@ import 'package:flutterapp2/helpers/dialog.dart';
 import 'package:flutterapp2/models/user.dart';
 import 'package:flutterapp2/services/googleSignInService.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:path_provider/path_provider.dart';
 // import 'package:flutter/services.dart' show rootBundle;
 // import 'package:path/path.dart';
 
@@ -18,7 +20,6 @@ import 'package:flutterapp2/widgets/ActionButton.dart';
 import 'package:flutterapp2/widgets/customDropdown.dart';
 import 'package:flutterapp2/widgets/customInput.dart';
 import 'package:flutterapp2/widgets/curvePainter.dart';
-import 'package:path_provider/path_provider.dart';
 
 class LostPetRegister extends StatefulWidget {
   LostPetRegister({Key? key}) : super(key: key);
@@ -55,9 +56,9 @@ class LostPetRegisterState extends State<LostPetRegister> {
 
   @override
   void initState (){
-    getImageFileFromAssets('perro.png');
     _getAllUserDataRegister();
     super .initState ();
+    getImageFileFromAssets('perroNotFound.png');
     _generateAge();
 
   }
@@ -335,12 +336,16 @@ class LostPetRegisterState extends State<LostPetRegister> {
         }
     );
   }
-  Future<File> getImageFileFromAssets(String path) async {
-    File IMG = File('${(await getTemporaryDirectory()).path}/$path');
-    setState((){
-      fileProfile = IMG;
+
+  Future<File?> getImageFileFromAssets(String path) async {
+    final byteData = await rootBundle.load('assets/$path');
+
+    final file3 = File('${(await getTemporaryDirectory()).path}/$path');
+    await file3.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    setState(() {
+      fileProfile = file3;
     });
-    return IMG;
+    return file3;
   }
 
   Future<User?> _getAllUserDataRegister() async {

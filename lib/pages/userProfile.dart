@@ -4,6 +4,7 @@ import 'package:flutterapp2/helpers/dialog.dart';
 import 'package:flutterapp2/models/user.dart';
 import 'package:flutterapp2/services/googleSignInService.dart';
 import 'package:flutterapp2/widgets/PetsGrid.dart';
+import 'package:flutterapp2/widgets/customFloatingActionButton.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:flutterapp2/models/pet.dart';
@@ -114,7 +115,8 @@ class _UserProfileState extends State<UserProfile> {
             );
           }
         }
-      )
+      ),
+      floatingActionButton: CustomFloatingActionButton(),
     );
   }
 
@@ -131,5 +133,5 @@ class _UserProfileState extends State<UserProfile> {
     user = await GoogleSignInService.getAllUserData(); 
     return user;
   }
-
+ 
 }

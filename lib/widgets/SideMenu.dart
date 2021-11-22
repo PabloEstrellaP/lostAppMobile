@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:bordered_text/bordered_text.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -8,9 +10,16 @@ class NavDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children: <Widget>[
           DrawerHeader(
-            child: Text(
-              'Side menu',
-              style: TextStyle(color: Colors.white, fontSize: 25),
+            child: BorderedText(
+              strokeWidth: 2,
+              strokeColor: Colors.black,
+              child: Text('LostAppPet', style: GoogleFonts.pacifico(
+                  textStyle: TextStyle(
+                    color: Colors.white, 
+                    fontSize: MediaQuery.of(context).size.height * 0.04,
+                  ),
+                ),
+              ),
             ),
             decoration: BoxDecoration(
               // color: Colors.green,
