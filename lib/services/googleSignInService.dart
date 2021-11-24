@@ -71,7 +71,7 @@ class GoogleSignInService {
     await _storage.write(key: 'name', value: userData['name']);
     await _storage.write(key: 'email', value: userData['email']);
     await _storage.write(key: 'picturePath', value: userData['picturePath']);
-    await _storage.write(key: 'id', value: userData['uid']);
+    await _storage.write(key: 'id', value: userData['_id']);
     return await _storage.write(key: 'token', value: token);
   }
 
@@ -100,7 +100,7 @@ class GoogleSignInService {
         scheme: Environment.scheme,
         // host: ' http://192.168.1.73:8080/',
         host: Environment.host,
-        port: 8080,
+        // port: 8080,
         path: '/api/auth' + pathService,
       );
   }

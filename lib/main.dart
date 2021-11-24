@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'LostPet',
-      initialRoute: 'profile',
+      initialRoute: 'loading',
       routes: appRoutes,
     );
   }

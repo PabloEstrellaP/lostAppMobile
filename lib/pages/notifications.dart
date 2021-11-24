@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:bordered_text/bordered_text.dart';
 
 import 'package:flutterapp2/models/reports.dart';
+import 'package:flutterapp2/models/user.dart';
+import 'package:flutterapp2/services/googleSignInService.dart';
 import 'package:flutterapp2/services/reportsService.dart';
 import 'package:flutterapp2/widgets/SideMenu.dart';
 import 'package:flutterapp2/widgets/customFloatingActionButton.dart';
@@ -18,7 +20,8 @@ class NotificationsPage extends StatefulWidget {
 
 class _NotificationsPageState extends State<NotificationsPage> {
   List<Report> data = [];
-  
+  User? user;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -85,9 +88,15 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
+  Future<User?> _getAllUserDataRegister() async {
+    user = await GoogleSignInService.getAllUserData(); 
+    return user;
+  }
+
   Future<Object> _getReports() async {
+    await _getAllUserDataRegister();
     data = [];
-    final response = await ReportsService.getReports();
+    final response = await ReportsService.getReports( user! );
     for( var dataJson in response['msg']){
       data.add(new Report.fromJson(dataJson));
     }

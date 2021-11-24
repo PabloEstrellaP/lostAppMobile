@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutterapp2/helpers/dialog.dart';
 import 'package:flutterapp2/models/user.dart';
+import 'package:flutterapp2/pages/userProfile.dart';
 import 'package:flutterapp2/services/googleSignInService.dart';
+import 'package:flutterapp2/widgets/CustomAlertDialog.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:path_provider/path_provider.dart';
@@ -234,15 +236,7 @@ class LostPetRegisterState extends State<LostPetRegister> {
                   icon: Icons.add, 
                   color: Colors.green,
                   operation: () async{
-                    porcent = (100 / 2 + file!.length).floor();
-                    CustomDialog.showDialog(context, size);
-                    print('Entré');
-                    await addPet();
-                    print('Salí');
-                    setState(() {
-                      porcent = porcent + sumPorc;
-                    });
-                    CustomDialog.closeDialog(context);
+                    await _addPetDialog( context, size );
                   },
                 ),
               ],
@@ -250,6 +244,58 @@ class LostPetRegisterState extends State<LostPetRegister> {
           ),
         )
       ),
+    );
+  }
+  Future<void> _addPetDialog( BuildContext context, Size size ) async {
+    showDialog(
+      context: context, 
+      builder: (BuildContext context){
+        return CustomAlertDialog(
+          title: '¿Seguro de agregar la mascota?',
+          text: 'Cancelar',
+          text2: 'Aceptar',
+          color: Colors.red,
+          color2: Colors.green,
+          function: (){
+            Navigator.pop(context);
+          },
+          function2: () async{
+            // Navigator.pop(context);
+            CustomDialog.showDialog(context, size);
+            await addPet();
+            CustomDialog.closeDialog(context);
+            _goToHome( context, size, '¡Se ha agregado con éxito!' );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _goToHome( BuildContext context, Size size, String title) async {
+    showDialog(
+      context: context, 
+      builder: (BuildContext context){
+        return CustomAlertDialog(
+          isOnlyAllow: true,
+          title: title,
+          text: 'Aceptar',
+          text2: '------',
+          color: Colors.green,
+          color2: Colors.red,
+          function: (){
+            Navigator.pushReplacement(
+              context, 
+              PageRouteBuilder(
+                pageBuilder: ( _, __, ___ ) => UserProfile(),
+                transitionDuration: Duration(milliseconds: 0)
+              )
+            );
+          },
+          function2: () async{
+            Navigator.pop(context);
+          },
+        );
+      },
     );
   }
 
@@ -358,15 +404,8 @@ class LostPetRegisterState extends State<LostPetRegister> {
     listObjIMG = [];
     await uploadFile( fileProfile, 100, true );
 
-    setState(() {
-      porcent = porcent + sumPorc;
-    });
-
     for( int i = 0; i < file!.length; i++){
       await uploadFile( file![i], i, false );
-      setState(() {
-        porcent = porcent + sumPorc;
-      });
     }
     print(newUser!.id);
     newPet = new Pet(
@@ -382,6 +421,6 @@ class LostPetRegisterState extends State<LostPetRegister> {
       user: newUser!,
       id: 'id'
     );
-    PetService.addPet( newPet! );
+    await PetService.addPet( newPet! );
   }
 }

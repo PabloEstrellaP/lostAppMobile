@@ -31,10 +31,11 @@ class NotificationItem extends StatelessWidget {
           color: Color.fromRGBO(251, 242, 240, 1),
           child: ListTile(
             leading: CircleAvatar(
-              radius: 30,
+              radius: 25,
               backgroundImage: NetworkImage(this.report.pet.profileImg),
             ),
             title: Text(this.report.pet.name),
+            subtitle: Text(this.report.from.name),
           ),
         ),
       ),

@@ -88,6 +88,6 @@ abstract class CustomDialog {
   }
 
   static closeDialog( BuildContext context ){
-    Navigator.pop(context);
+    // Navigator.pop(context);
   } 
 }

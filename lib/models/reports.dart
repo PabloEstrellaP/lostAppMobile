@@ -7,7 +7,8 @@ class Report {
   final String id; 
   final String description;
   late final Pet pet;
-  late final User user;
+  late final User to;
+  late final User from;
   final DateTime date;
   final bool isCheked;
 
@@ -16,7 +17,8 @@ class Report {
     required this.description,
     required this.pet,
     required this.date,
-    required this.user,
+    required this.to,
+    required this.from,
     required this.isCheked,
   });
 
@@ -24,7 +26,8 @@ class Report {
     : id = json['_id'],
       description = json['description'],
       pet = Pet.fromJson(json['pet']),
-      user = User.fromJson(json['msgUser']),
+      to = User.fromJson(json['to']),
+      from = User.fromJson(json['from']),
       date = DateTime.parse(json['date']), 
       isCheked = json['isCheked'];
 
@@ -34,7 +37,8 @@ class Report {
       "id" : this.id,
       "description" : this.description,
       "pet" :  jsonEncode(this.pet),
-      "user" : jsonEncode(this.user),
+      "to" : jsonEncode(this.to),
+      "from" : jsonEncode(this.from),
       "date" : this.date.toString(),
       "isCheked": this.isCheked.toString(),
     };

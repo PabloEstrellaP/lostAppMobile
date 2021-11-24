@@ -61,7 +61,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin{
 
     final history = chat.map((m) => new ChatMessage(
       texto: m.description,
-      uid: m.user.id,
+      uid: m.from.id,
       myUser: user!,
       animationController: new AnimationController(vsync: this, duration: Duration( milliseconds: 0))..forward(),
     ));
@@ -80,11 +80,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin{
         title: Column(
           children: <Widget>[
             CircleAvatar(
-              backgroundImage: NetworkImage(stateReport!.user.picturePath),
+              backgroundImage: NetworkImage(stateReport!.from.picturePath),
               maxRadius: 14,
             ),
             SizedBox( height: 3 ),
-            Text( stateReport!.user.name, style: TextStyle( color: Colors.black87, fontSize: 12))
+            Text( stateReport!.from.name, style: TextStyle( color: Colors.black87, fontSize: 12))
           ],
         ),
         centerTitle: true,
@@ -189,7 +189,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin{
       description: texto, 
       pet: stateReport!.pet, 
       date: new DateTime.now(), 
-      user: user!, 
+      to: stateReport!.from, 
+      from: user!,
       isCheked: true
     );
     

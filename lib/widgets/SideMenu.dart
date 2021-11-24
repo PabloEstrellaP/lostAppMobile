@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:bordered_text/bordered_text.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'package:bordered_text/bordered_text.dart';
+import 'package:flutterapp2/pages/loginPage.dart';
+import 'package:flutterapp2/services/googleSignInService.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class NavDrawer extends StatelessWidget {
   @override
@@ -43,6 +47,21 @@ class NavDrawer extends StatelessWidget {
             leading: Icon(Icons.account_circle),
             title: Text('Perfil'),
             onTap: () => {Navigator.pushReplacementNamed(context, 'profile')},
+          ),
+          ListTile(
+            leading: Icon(FontAwesomeIcons.doorOpen),
+            title: Text('Salir'),
+            onTap: () async {
+              await GoogleSignInService.deleteToken();
+              await GoogleSignInService.signOut();
+              Navigator.pushReplacement(
+                context, 
+                PageRouteBuilder(
+                  pageBuilder: ( _, __, ___ ) => LoginPage(),
+                  transitionDuration: Duration(milliseconds: 0)
+                )
+              );
+            },
           ),
         ],
       ),

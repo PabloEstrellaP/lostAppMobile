@@ -339,7 +339,7 @@ class LostPetEditState extends State<LostPetEdit> {
           function2: () async{
             CustomDialog.showDialog(context, size);
             _generatePet();
-            // await PetService.deletePet( newPet! );
+            await PetService.deletePet( newPet! );
             CustomDialog.closeDialog(context);
             Navigator.pop(context);
             _goToHome( context, size, '¡Se ha eliminado con éxito!' );
@@ -450,7 +450,7 @@ class LostPetEditState extends State<LostPetEdit> {
     _generatePet();
     Navigator.push(context, 
       PageRouteBuilder(
-        pageBuilder: ( _, __, ___ ) => PetDetailsPage( littlePet: newPet,),
+        pageBuilder: ( _, __, ___ ) => PetDetailsPage( littlePet: newPet, isPreview: true,),
         transitionDuration: Duration(milliseconds: 2)
     ));
   }
